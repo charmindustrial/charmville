@@ -1112,7 +1112,8 @@ function removeBuilding(gx, gy) {
   if (!isValidTile(gx,gy)) return;
   const b = state.grid[gy][gx];
   if (!b) return;
-  const refund = Math.floor(b.def.cost * 0.4);
+  const refundRate = state.tick === 0 ? 1.0 : 0.4; // 100% refund before game starts, 40% after
+  const refund = Math.floor(b.def.cost * refundRate);
   state.money += refund;
   state.buildings = state.buildings.filter(bb=>bb!==b);
   state.grid[gy][gx] = null;
@@ -2952,13 +2953,8 @@ const TUTORIAL_SLIDES = [
   { title:'🎯 Your Mission',
     body:`<span style="font-size:16px;color:#ff6b35;font-weight:700">Reach 20,000 tonnes net CDR as fast as possible.</span><br><br>
     Track progress with the 🎯 bar in the topbar. Go bankrupt at <span class="tut-red">-$100k</span> and Tim thinks you could have done better.<br><br>
-    <span class="tut-highlight">Quick start:</span><br>
-    1. Toggle 🪨 Geology — find green sandstone<br>
-    2. Place biomass lots on matching terrain near a river<br>
-    3. Place a pyrolyzer + storage adjacent<br>
-    4. Place an injection well on good geology<br>
-    5. Connect everything with a truck depot<br>
-    6. Press <span class="tut-highlight">Space</span> to unpause. Good luck!`},
+    <span class="tut-highlight">Game Speed:</span> Use the topbar buttons (⏸ 1× 2× 7×) or keyboard: <span class="tut-blue">Space</span> = pause/unpause, <span class="tut-blue">Tab</span> = cycle speed. The game starts paused — build first, then unpause. Bulldoze at <span class="tut-green">100% refund</span> while paused!<br><br>
+    <span class="tut-highlight">Quick start:</span> Toggle 🪨 Geology to find green sandstone. Place biomass lots on matching terrain near a river. Add a pyrolyzer + storage adjacent. Place an injection well on good geology. Connect with a truck depot. Press <span class="tut-highlight">Space</span> to begin!`},
 ];
 let tutStep = 0;
 function renderTutSlide() {
